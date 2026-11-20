@@ -1,0 +1,38 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-paper: #fafaf8;
+  --color-ink: #222222;
+  --color-muted: #6b6b66;
+  --color-rule: #e6e6e0;
+  --color-accent: #2f5d50;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html { background: var(--color-paper); color: var(--color-ink); }
+body { font-feature-settings: "cv11", "ss01"; -webkit-font-smoothing: antialiased; }
+
+/* Case-study typography */
+.prose {
+  --tw-prose-body: var(--color-ink);
+  --tw-prose-headings: var(--color-ink);
+  --tw-prose-links: var(--color-accent);
+  --tw-prose-bold: var(--color-ink);
+  --tw-prose-code: var(--color-ink);
+  --tw-prose-hr: var(--color-rule);
+  --tw-prose-captions: var(--color-muted);
+}
+.prose h2 { letter-spacing: -0.01em; margin-top: 3rem; }
+.prose img { border: 1px solid var(--color-rule); border-radius: 0.5rem; }
+.prose pre { border: 1px solid var(--color-rule); border-radius: 0.5rem; font-size: 0.8125rem; line-height: 1.6; }
+.prose :not(pre) > code { background: #efefea; padding: 0.1em 0.35em; border-radius: 0.25rem; font-weight: 500; }
+.prose :not(pre) > code::before, .prose :not(pre) > code::after { content: none; }
+.prose p:has(> img) + p > em:only-child { display: block; margin-top: -1rem; font-size: 0.875rem; color: var(--color-muted); font-style: normal; }
+
+/* Side-by-side image rows inside markdown */
+.prose .img-row { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.prose .img-row img { margin: 0; }
+.prose > p:first-child > em:only-child { display: block; font-size: 0.875rem; color: var(--color-muted); font-style: normal; }
+.prose img[alt*="phone"] { max-width: 300px; margin-inline: auto; }

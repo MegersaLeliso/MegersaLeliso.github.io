@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" font-family="Inter, -apple-system, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3a3a3a"/></marker>
+    <style>
+      .t{font-size:15px;fill:#222;font-weight:600}
+      .s{font-size:12.5px;fill:#555}
+      .m{font-family:"JetBrains Mono",Menlo,monospace;font-size:12px;fill:#333}
+      .h{font-size:12px;letter-spacing:.12em;fill:#888;font-weight:600}
+      .box{fill:#fff;stroke:#2b2b2b;stroke-width:1.4}
+      .soft{fill:#f3f3ef;stroke:#cfcfc8;stroke-width:1}
+      .acc{fill:#eef2f8;stroke:#3b5b8c;stroke-width:1.4}
+      .l{stroke:#3a3a3a;stroke-width:1.4;fill:none}
+      .d{stroke:#999;stroke-width:1.3;fill:none;stroke-dasharray:5 4}
+    </style>
+  </defs>
+  <rect width="1200" height="700" fill="#FAFAF8"/>
+  <text x="40" y="48" font-size="22" font-weight="700" fill="#1f1f1f">Smart Weather Dashboard — Request Flow</text>
+  <text x="40" y="72" class="s">Server-rendered Express + EJS, Open-Meteo upstream, PostgreSQL as an optional layer that can fail without taking the page down</text>
+
+  <text x="40" y="118" class="h">BROWSER</text>
+  <text x="330" y="118" class="h">EXPRESS SERVER</text>
+  <text x="880" y="118" class="h">EXTERNAL / DATA</text>
+
+  <!-- Browser -->
+  <rect x="40" y="132" width="240" height="120" rx="10" class="box"/>
+  <text x="58" y="160" class="t">Search box</text>
+  <text x="58" y="182" class="s">debounced autocomplete →</text>
+  <text x="58" y="200" class="s">Open-Meteo geocoding (client)</text>
+  <rect x="58" y="212" width="204" height="28" rx="6" class="soft"/><text x="70" y="231" class="m">GET /?city=Addis Ababa, ET</text>
+
+  <rect x="40" y="290" width="240" height="250" rx="10" class="box"/>
+  <text x="58" y="318" class="t">Rendered dashboard</text>
+  <text x="58" y="340" class="s">data-theme = day | sunset | night</text>
+  <g class="m">
+    <text x="58" y="372">hero3d.js</text><text x="146" y="372" class="s" font-size="11.5">Three.js 3D hero</text>
+    <text x="58" y="398">ambient.js</text><text x="146" y="398" class="s" font-size="11.5">weather particles</text>
+    <text x="58" y="424">skyview.js</text><text x="146" y="424" class="s" font-size="11.5">MapLibre 3D city</text>
+  </g>
+  <line x1="58" y1="444" x2="262" y2="444" stroke="#e0e0da"/>
+  <text x="58" y="468" class="s">Major Shift card (SVG chart)</text>
+  <text x="58" y="488" class="s">Outdoor / laundry suitability</text>
+  <text x="58" y="508" class="s">prefers-reduced-motion respected</text>
+
+  <!-- Server pipeline -->
+  <rect x="330" y="132" width="500" height="408" rx="10" class="box"/>
+  <text x="348" y="160" class="t">routes/weather.js  ·  GET /</text>
+
+  <rect x="348" y="178" width="220" height="56" rx="8" class="acc"/>
+  <text x="362" y="201" class="t" font-size="13.5">1 · geocodeCity()</text>
+  <text x="362" y="221" class="s" font-size="11.5">"City, Region, CC" disambiguation</text>
+
+  <rect x="348" y="256" width="220" height="56" rx="8" class="acc"/>
+  <text x="362" y="279" class="t" font-size="13.5">2 · getForecast(lat, lon)</text>
+  <text x="362" y="299" class="s" font-size="11.5">cache hit? else fetch + upsert</text>
+
+  <rect x="348" y="334" width="220" height="56" rx="8" class="acc"/>
+  <text x="362" y="357" class="t" font-size="13.5">3 · formatWeatherData()</text>
+  <text x="362" y="377" class="s" font-size="11.5">theme from is_day + sunrise/sunset</text>
+
+  <rect x="348" y="412" width="220" height="56" rx="8" class="acc"/>
+  <text x="362" y="435" class="t" font-size="13.5">4 · renderDashboard()</text>
+  <text x="362" y="455" class="s" font-size="11.5">Promise.all(saved, history, prefs)</text>
+
+  <path d="M458 234 V256 M458 312 V334 M458 390 V412" class="l" marker-end="url(#a)"/>
+
+  <rect x="596" y="334" width="216" height="134" rx="8" class="soft"/>
+  <text x="610" y="356" class="t" font-size="13.5">utils/</text>
+  <text x="610" y="380" class="m">shiftDetector.js</text>
+  <text x="610" y="396" class="s" font-size="11">&gt;10 °C in 3 h · precip onset ≤3 h</text>
+  <text x="610" y="420" class="m">suitability.js</text>
+  <text x="610" y="436" class="s" font-size="11">wind / humidity / rain thresholds</text>
+  <text x="610" y="458" class="m">weatherHelpers.js</text>
+  <path d="M568 400 H596" class="l"/>
+
+  <rect x="348" y="486" width="464" height="40" rx="8" fill="#fff8ec" stroke="#d9a441"/>
+  <text x="362" y="511" class="m">safeDb(label, fn, fallback)</text>
+  <text x="560" y="511" class="s" font-size="11.5">DB error → log + fallback, never throws</text>
+
+  <!-- Arrows browser <-> server -->
+  <path d="M280 226 H310 V206 H348" class="l" marker-end="url(#a)"/>
+  <path d="M348 440 H310 V400 H280" class="l" marker-end="url(#a)"/>
+  <text x="284" y="392" class="s" font-size="10.5">HTML</text>
+
+  <!-- External -->
+  <rect x="880" y="160" width="280" height="96" rx="10" class="box"/>
+  <text x="898" y="188" class="t">Open-Meteo APIs</text>
+  <text x="898" y="210" class="m">geocoding-api …/v1/search</text>
+  <text x="898" y="230" class="m">api …/v1/forecast</text>
+  <text x="898" y="246" class="s" font-size="11">current · hourly · daily sunrise/sunset</text>
+  <path d="M568 206 H880" class="l" marker-end="url(#a)"/>
+  <path d="M568 284 H720 V236 H880" class="l" marker-end="url(#a)"/>
+
+  <rect x="880" y="300" width="280" height="186" rx="10" class="box"/>
+  <text x="898" y="328" class="t">PostgreSQL (optional)</text>
+  <g class="m">
+    <text x="898" y="356">weather_cache</text><text x="1020" y="356" class="s" font-size="11">TTL 20 min</text>
+    <text x="898" y="380">saved_cities</text>
+    <text x="898" y="404">search_history</text>
+    <text x="898" y="428">preferences</text>
+  </g>
+  <text x="898" y="456" class="s" font-size="11">key = round(lat, lon, 2dp) ≈ 1 km</text>
+  <text x="898" y="474" class="s" font-size="11">upsert … ON CONFLICT DO UPDATE</text>
+  <path d="M812 506 H850 V393 H880" class="d" marker-end="url(#a)"/>
+
+  <!-- Bottom strip -->
+  <rect x="40" y="586" width="1120" height="84" rx="10" fill="#fff" stroke="#e0e0da"/>
+  <text x="58" y="612" class="h">THEME RULE</text>
+  <text x="58" y="646" class="m">is_day == 0 → night   ·   within 1.5 h of sunset or 1 h of sunrise → sunset   ·   otherwise → day</text>
+  <text x="58" y="664" class="s" font-size="11">Computed per location's local clock, so the UI matches the sky in the city searched, not the viewer's.</text>
+</svg>

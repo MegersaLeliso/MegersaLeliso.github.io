@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" font-family="Inter, -apple-system, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3a3a3a"/></marker>
+    <marker id="tri" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#fff" stroke="#3a3a3a" stroke-width="1.2"/></marker>
+    <marker id="dia" viewBox="0 0 14 10" refX="1" refY="5" markerWidth="12" markerHeight="9" orient="auto"><path d="M1,5 L7,1 L13,5 L7,9 z" fill="#3a3a3a"/></marker>
+    <style>
+      .t{font-size:15px;fill:#222;font-weight:600}
+      .s{font-size:12.5px;fill:#555}
+      .m{font-family:"JetBrains Mono",Menlo,monospace;font-size:12px;fill:#333}
+      .h{font-size:12px;letter-spacing:.12em;fill:#888;font-weight:600}
+      .box{fill:#fff;stroke:#2b2b2b;stroke-width:1.4}
+      .soft{fill:#f3f3ef;stroke:#cfcfc8;stroke-width:1}
+      .acc{fill:#eef4ef;stroke:#2f6b4a;stroke-width:1.4}
+      .l{stroke:#3a3a3a;stroke-width:1.4;fill:none}
+    </style>
+  </defs>
+  <rect width="1200" height="700" fill="#FAFAF8"/>
+  <text x="40" y="48" font-size="22" font-weight="700" fill="#1f1f1f">Vehicle Rental Web App — Architecture</text>
+  <text x="40" y="72" class="s">Zero-framework Java: com.sun.net.httpserver + hand-written JSON over an in-memory OOP domain model</text>
+
+  <!-- Column headers -->
+  <text x="40" y="118" class="h">CLIENT</text>
+  <text x="330" y="118" class="h">HTTP LAYER</text>
+  <text x="700" y="118" class="h">DOMAIN MODEL (IN-MEMORY)</text>
+
+  <!-- Client -->
+  <rect x="40" y="132" width="240" height="190" rx="10" class="box"/>
+  <text x="58" y="160" class="t">public/index.html</text>
+  <text x="58" y="182" class="s">Dashboard · Dispatch console</text>
+  <rect x="58" y="198" width="204" height="30" rx="6" class="soft"/><text x="70" y="218" class="m">fetch('/api/vehicles')</text>
+  <rect x="58" y="236" width="204" height="30" rx="6" class="soft"/><text x="70" y="256" class="m">fetch('/api/rent', POST)</text>
+  <rect x="58" y="274" width="204" height="30" rx="6" class="soft"/><text x="70" y="294" class="m">render stats · activity log</text>
+
+  <!-- Server -->
+  <rect x="330" y="132" width="320" height="400" rx="10" class="box"/>
+  <text x="348" y="160" class="t">WebServer</text>
+  <text x="348" y="182" class="s">HttpServer.create(:8080) · one context "/"</text>
+  <rect x="348" y="196" width="284" height="34" rx="6" class="acc"/>
+  <text x="362" y="218" class="m">handleRequest(exchange) → switch(path)</text>
+  <g class="m">
+    <text x="362" y="256">GET  /api/vehicles</text>
+    <text x="362" y="280">GET  /api/customers</text>
+    <text x="362" y="304">POST /api/rent</text>
+    <text x="362" y="328">POST /api/return</text>
+    <text x="362" y="352">GET  /api/report</text>
+  </g>
+  <line x1="348" y1="372" x2="632" y2="372" stroke="#e0e0da"/>
+  <text x="348" y="396" class="s" font-weight="600" fill="#333">Guards</text>
+  <text x="348" y="416" class="s">8 KB request cap · JsonObjectParser</text>
+  <text x="348" y="434" class="s">synchronized (agency) around handlers</text>
+  <text x="348" y="462" class="s" font-weight="600" fill="#333">Exception → status</text>
+  <text x="348" y="482" class="m" font-size="11">IllegalArgument 400 · MethodNotAllowed 405</text>
+  <text x="348" y="500" class="m" font-size="11">IllegalState 409 · unknown path 404</text>
+  <text x="348" y="518" class="m" font-size="11">Unavailable / Eligibility → 400 + msg</text>
+
+  <!-- client <-> server -->
+  <path d="M280 213 H330" class="l" marker-end="url(#a)"/>
+  <path d="M330 290 H280" class="l" marker-end="url(#a)"/>
+  <text x="284" y="206" class="s" font-size="11">JSON</text>
+  <text x="284" y="306" class="s" font-size="11">JSON</text>
+
+  <!-- Domain -->
+  <rect x="700" y="132" width="460" height="64" rx="10" class="acc"/>
+  <text x="718" y="158" class="t">RentalAgency</text>
+  <text x="718" y="180" class="s">orchestrator · all public methods synchronized</text>
+  <path d="M650 215 H690 V164 H700" class="l" marker-end="url(#a)"/>
+
+  <!-- Fleet -->
+  <rect x="700" y="240" width="210" height="64" rx="10" class="box"/>
+  <text x="718" y="266" class="t">Fleet</text>
+  <text x="718" y="288" class="m">Vehicle[capacity] + count</text>
+  <!-- Customers -->
+  <rect x="950" y="240" width="210" height="64" rx="10" class="box"/>
+  <text x="968" y="266" class="t">Customer[]</text>
+  <text x="968" y="288" class="m">fixed capacity + count</text>
+  <path d="M805 240 V196" class="l" marker-start="url(#dia)"/>
+  <path d="M1055 240 V196" class="l" marker-start="url(#dia)"/>
+  <text x="812" y="226" class="s" font-size="11">composition</text>
+
+  <!-- Vehicle hierarchy -->
+  <rect x="700" y="350" width="210" height="80" rx="10" class="box" stroke-dasharray="5 3"/>
+  <text x="718" y="376" class="t" font-style="italic">«abstract» Vehicle</text>
+  <text x="718" y="398" class="m">calculateRentalCost(days)</text>
+  <text x="718" y="416" class="m">checkEligibility(customer)</text>
+  <path d="M805 304 V350" class="l" marker-end="url(#a)"/>
+  <g>
+    <rect x="690" y="480" width="70" height="40" rx="8" class="soft"/><text x="725" y="505" class="m" text-anchor="middle">Car</text>
+    <rect x="770" y="480" width="90" height="40" rx="8" class="soft"/><text x="815" y="505" class="m" text-anchor="middle">Motorcycle</text>
+    <rect x="870" y="480" width="64" height="40" rx="8" class="soft"/><text x="902" y="505" class="m" text-anchor="middle">Truck</text>
+    <path d="M725 480 V455 H902 V480 M815 480 V455" class="l"/>
+    <path d="M805 455 V430" class="l" marker-end="url(#tri)"/>
+  </g>
+  <text x="700" y="546" class="s" font-size="11.5">Polymorphism: agency never branches on vehicle type</text>
+
+  <!-- Rental history -->
+  <rect x="950" y="350" width="210" height="64" rx="10" class="box"/>
+  <text x="968" y="376" class="t">RentalHistory</text>
+  <text x="968" y="398" class="m">RentalTransaction[100]</text>
+  <path d="M1055 304 V350" class="l" marker-start="url(#dia)"/>
+  <rect x="950" y="460" width="210" height="64" rx="10" class="box"/>
+  <text x="968" y="486" class="t">RentalTransaction</text>
+  <text x="968" y="508" class="m">vehicle · days · cost</text>
+  <path d="M1055 414 V460" class="l" marker-end="url(#a)"/>
+  <path d="M950 492 H934" class="l" stroke-dasharray="4 3"/>
+
+  <!-- Rent flow strip -->
+  <rect x="40" y="586" width="1120" height="84" rx="10" fill="#fff" stroke="#e0e0da"/>
+  <text x="58" y="612" class="h">POST /api/rent — REQUEST LIFECYCLE</text>
+  <g class="m" font-size="12">
+    <text x="58" y="646">parse body</text>
+    <text x="170" y="646">→  findCustomerByName</text>
+    <text x="360" y="646">→  fleet.findVehicleByPlate</text>
+    <text x="580" y="646">→  isAvailable?</text>
+    <text x="705" y="646">→  checkEligibility()</text>
+    <text x="875" y="646">→  calculateRentalCost()</text>
+    <text x="1060" y="646">→  rent()</text>
+  </g>
+</svg>

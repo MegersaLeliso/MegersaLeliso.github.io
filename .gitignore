@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+
+# Private notes (contains phone number)
+raw-assets/notes.txt
